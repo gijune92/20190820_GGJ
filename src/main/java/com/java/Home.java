@@ -1,6 +1,7 @@
 package com.java;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -42,7 +43,9 @@ public class Home extends HttpServlet {
 				resultMap = hd.run(file_name);
 				if(!resultMap.get("result").equals("")) {
 					strView = resultMap.get("result").toString();
-					System.out.println(strView);
+					
+					System.out.println(new String(strView.getBytes("UTF-8"),"UTF-8"));
+					
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -54,8 +57,8 @@ public class Home extends HttpServlet {
 			res.setContentType("text/plain; charset=UTF-8");
 			res.setCharacterEncoding("UTF-8");
 			req.setAttribute("file_name", file_name);
-			String bb = new String(strView.getBytes("latin1"), "utf-8");
-			req.setAttribute("result",bb);
+			//String bb = new String(strView.getBytes("latin1"), "utf-8");
+			req.setAttribute("result",strView);
 
 
 			/*

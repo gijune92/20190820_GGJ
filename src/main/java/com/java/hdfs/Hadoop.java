@@ -178,6 +178,7 @@ public class Hadoop {
 			fsis.close();
 		}
 		System.out.println("Hadoop.resultData() >> End");
+		System.out.println(sb);
 		return sb.toString();
 	}
 
