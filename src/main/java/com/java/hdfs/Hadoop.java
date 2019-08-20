@@ -1,6 +1,8 @@
 package com.java.hdfs;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import org.apache.hadoop.conf.Configuration;
@@ -55,19 +57,24 @@ public class Hadoop {
 			 * 3) 성공 시 결과 받기 : resultData()
 			 **************************************************/
 			boolean res = fileCopy(fileName);
-			if(res) {
+			if(!res) {
 				System.out.println("----------------------------true---------------------------");
-				mapReduser();
-							}
+				boolean reduserRes = mapReduser();
+				if(!reduserRes) {
+					resultMap.put("result",resultData());
+					status = 2;
+				} else {
+					status = 1;
+				}
+				
+				
+			}
 			else {
+				status = 0;
 				System.out.println("----------------------------fail---------------------------");
 			}
-			//resultMap = resultData();
-			resultMap.put("result", resultData());
-			
 		}
 		resultMap.put("status", status);
-
 		System.out.println("Hadoop.run() >> End");
 		return resultMap;
 	}
@@ -170,12 +177,14 @@ public class Hadoop {
 			int byteRead = 0;
 			while((byteRead = fsis.read()) > 0) { 
 				// 정제 결과를 문자열 변수에 담기
-				sb.append(byteRead);
+				sb.append((char)byteRead);
 			}
 			fsis.close();
 		}
 		System.out.println("Hadoop.resultData() >> End");
-		System.out.println(sb);
+
+				
+		
 		return sb.toString();
 	}
 

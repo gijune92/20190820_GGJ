@@ -1,0 +1,7 @@
+export MAVEN_HOME=/root/apache-maven-3.6.1
+export PATH=$PATH:$MAVEN_HOME/bin:$JAVA_HOME/bin
+
+cd /root/20190820_GGJ
+git pull
+mvn clean package
+cp /root/20190820_GGJ/target/hdfs-test.war /root/tomcat/webapps/ROOT.war

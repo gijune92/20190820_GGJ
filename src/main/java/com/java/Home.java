@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.CharSet;
+import org.apache.hadoop.io.BytesWritable;
 
 import com.java.hdfs.Hadoop;
 
@@ -43,9 +44,6 @@ public class Home extends HttpServlet {
 				resultMap = hd.run(file_name);
 				if(!resultMap.get("result").equals("")) {
 					strView = resultMap.get("result").toString();
-					
-					System.out.println(new String(strView.getBytes("UTF-8"),"UTF-8"));
-					
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
