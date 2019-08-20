@@ -22,8 +22,9 @@ public class Hadoop {
 	protected Configuration hadoopConf = null;
 	protected Configuration localConf = null;
 	// hadoop 접속 주소 (hadoop server ip 수정 할것) <<<<<<<<<<<<<<<<<<
-	protected final String URL = "hdfs://ip:9000";
-	protected final String LOCAL = "/root/data/";
+	protected final String URL = "hdfs://192.168.3.14:9000";
+	protected final String LOCAL = "/root/download/data/";
+	//protected final String LOCAL ="/Users/June/data/";
 	// hadoop 정제 대상 경로 / 처리 결과 저장 경로 및 파일
 	protected final String INPUT = "/input/";
 	protected final String OUTPUT = "/output";
@@ -36,7 +37,7 @@ public class Hadoop {
 	protected FileSystem localSystem = null;
 	
 	// Hadoop 외부 요청 메소드
-	public HashMap<String, Object> run(String fileName){
+	public HashMap<String, Object> run(String fileName) throws ClassNotFoundException, IOException, InterruptedException{
 		System.out.println("Hadoop.run() >> Start");
 		resultMap = new HashMap<String, Object>();
 		int status = 0;
@@ -53,8 +54,23 @@ public class Hadoop {
 			 * 2) 정제 요청 : mapReduser()
 			 * 3) 성공 시 결과 받기 : resultData()
 			 **************************************************/
+			boolean res = fileCopy(fileName);
+			if(res) {
+				System.out.println("----------------------------true---------------------------");
+				mapReduser();
+				
+
+				
+			}
+			else {
+				System.out.println("----------------------------fail---------------------------");
+			}
+			//resultMap = resultData();
+			resultMap.put("result", resultData());
+			
 		}
 		resultMap.put("status", status);
+
 		System.out.println("Hadoop.run() >> End");
 		return resultMap;
 	}
@@ -76,6 +92,9 @@ public class Hadoop {
 			// 파일시스템 정보 정의
 			localSystem = FileSystem.getLocal(localConf);
 			hadoopSystem = FileSystem.get(hadoopConf);
+			if(hadoopSystem.exists(new Path("/output"))) {
+				hadoopSystem.delete(new Path("/output"));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = false;
@@ -114,6 +133,8 @@ public class Hadoop {
 	// Hadoop 정제 요청 메소드
 	protected boolean mapReduser() throws ClassNotFoundException, IOException, InterruptedException {
 		System.out.println("Hadoop.mapReduser() >> Start");
+
+		
 		// 정제 작업 객체 변수
 		Job job = Job.getInstance(hadoopConf, "test");
 		// 실행 대상 클래스 지정

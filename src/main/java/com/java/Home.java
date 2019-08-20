@@ -1,6 +1,7 @@
 package com.java;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.CharSet;
+
+import com.java.hdfs.Hadoop;
 
 @WebServlet("/Home")
 public class Home extends HttpServlet {
@@ -22,6 +27,9 @@ public class Home extends HttpServlet {
 
 	// 분석 및 결과 출력
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		Hadoop hd = new Hadoop();
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		String strView = null;
 		System.out.println("Home.doPost() >> Start");
 		// 정제 요청 대상 파일명 변수
 		String file_name = req.getParameter("file_name");		
@@ -30,7 +38,31 @@ public class Home extends HttpServlet {
 			res.sendRedirect("/Home");
 		} else {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+			try {
+				resultMap = hd.run(file_name);
+				if(!resultMap.get("result").equals("")) {
+					strView = resultMap.get("result").toString();
+					System.out.println(strView);
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			res.setContentType("text/plain; charset=UTF-8");
+			res.setCharacterEncoding("UTF-8");
 			req.setAttribute("file_name", file_name);
+			String bb = new String(strView.getBytes("latin1"), "utf-8");
+			req.setAttribute("result",bb);
+
+
+			/*
+			System.out.println("strView : " + strView);
+
+			res.getWriter().write(strView);
+			*/
 			RequestDispatcher rd = req.getRequestDispatcher(viewPath("result"));
 			rd.forward(req, res);
 		}
