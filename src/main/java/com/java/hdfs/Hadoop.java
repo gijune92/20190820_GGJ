@@ -66,8 +66,6 @@ public class Hadoop {
 				} else {
 					status = 1;
 				}
-				
-				
 			}
 			else {
 				status = 0;
@@ -137,8 +135,6 @@ public class Hadoop {
 	// Hadoop 정제 요청 메소드
 	protected boolean mapReduser() throws ClassNotFoundException, IOException, InterruptedException {
 		System.out.println("Hadoop.mapReduser() >> Start");
-
-		
 		// 정제 작업 객체 변수
 		Job job = Job.getInstance(hadoopConf, "test");
 		// 실행 대상 클래스 지정

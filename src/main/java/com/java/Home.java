@@ -52,18 +52,8 @@ public class Home extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			res.setContentType("text/plain; charset=UTF-8");
-			res.setCharacterEncoding("UTF-8");
 			req.setAttribute("file_name", file_name);
-			//String bb = new String(strView.getBytes("latin1"), "utf-8");
-			req.setAttribute("result",strView);
-
-
-			/*
-			System.out.println("strView : " + strView);
-
-			res.getWriter().write(strView);
-			*/
+			req.setAttribute("result", strView);
 			RequestDispatcher rd = req.getRequestDispatcher(viewPath("result"));
 			rd.forward(req, res);
 		}
