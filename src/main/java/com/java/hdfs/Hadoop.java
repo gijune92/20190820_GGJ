@@ -58,10 +58,7 @@ public class Hadoop {
 			if(res) {
 				System.out.println("----------------------------true---------------------------");
 				mapReduser();
-				
-
-				
-			}
+							}
 			else {
 				System.out.println("----------------------------fail---------------------------");
 			}
