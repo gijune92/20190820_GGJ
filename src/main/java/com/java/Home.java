@@ -42,18 +42,20 @@ public class Home extends HttpServlet {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			try {
 				resultMap = hd.run(file_name);
+				System.out.println(resultMap.toString());
 				if(!resultMap.get("result").equals("")) {
 					strView = resultMap.get("result").toString();
+					req.setAttribute("result", strView);
 				}
+				
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			req.setAttribute("file_name", file_name);
-			req.setAttribute("result", strView);
+			req.setAttribute("status", resultMap.get("status").toString());
 			RequestDispatcher rd = req.getRequestDispatcher(viewPath("result"));
 			rd.forward(req, res);
 		}
